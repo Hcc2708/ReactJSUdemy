@@ -1,10 +1,13 @@
-export default function Cart({ items, onUpdateItemQuantity }) {
+import { useContext } from "react";
+import ContextApi from "../store/ContextApi";
+
+export default function Cart({ items }) {
   const totalPrice = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
   const formattedTotalPrice = `$${totalPrice.toFixed(2)}`;
-
+  const {onUpdateCartItemQuantity} = useContext(ContextApi)
   return (
     <div id="cart">
       {items.length === 0 && <p>No items in cart!</p>}
@@ -20,11 +23,11 @@ export default function Cart({ items, onUpdateItemQuantity }) {
                   <span> ({formattedPrice})</span>
                 </div>
                 <div className="cart-item-actions">
-                  <button onClick={() => onUpdateItemQuantity(item.id, -1)}>
+                  <button onClick={() => onUpdateCartItemQuantity(item.id, -1)}>
                     -
                   </button>
                   <span>{item.quantity}</span>
-                  <button onClick={() => onUpdateItemQuantity(item.id, 1)}>
+                  <button onClick={() => onUpdateCartItemQuantity(item.id, 1)}>
                     +
                   </button>
                 </div>
