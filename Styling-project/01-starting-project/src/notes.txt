@@ -1,0 +1,8 @@
+the styled components underhood creates a inbuilt html elements like lable, h1 for which it is used, and then it also passes every prop to that elements,
+e.g
+
+<Lable id = 'lable'></Lable> here it will automatically set <lable id = 'lable'>
+
+not just for the className or id but also for event listner, which is not automatically set while using function  components.
+
+you can also pass a custom props which then you can use inside styled components

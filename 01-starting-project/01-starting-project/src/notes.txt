@@ -1,0 +1,103 @@
+while writing js codes inside the {} with jsx the if-statement, for loops, function definition and any other block level elements are not allowed only expression that directly produce values are allowed.
+
+ther Header.css scope is not limited to that components only 
+
+* the "Children" prop
+React Automatically passes a special prop named "children" to every custom component, the content between component opening and closing tags is used as a value for the special "children" prop.
+
+* By defualt react components executed once.( to render in UI(jsx won't be re-evaluated) not in background, the function who perform expression will be still executing)
+"" you will have to tell the react if you want to execute the component ( to re-evaluate the jsx) again when certain event occurs"".
+
+** that only the reason(beacause the  component function executed once) that we can't use regular variable to update UI, instead we use state which tells the react to rerender the jsx. (or re-execute the  component function it belongs)
+
+** react hooks should only be called inside the function components or any other custom hooks. it should also not be called from inside of any nested function or other block level element of the main component function. you must call it on the top level of the component function
+
+** use state returns an array fo two elements.
+
+*JSX is capable of outputing the arrays of jsx. e.g using map()
+
+** JSX expression must have one parent element
+
+<></> is used in react to avoid extra div tage and this is the alternative of Fragment in react.
+
+** Fragments help you avoid unnecessary HTML elements.
+
+** remember that only in state update only that component function will be reexecute in which that state belongs to. and until you did not change the state the code execution will be still there in the background, like for some console print or any other, once you perform the change in the state all the code inside that components function will be reexecuted.
+
+** whenever state update call is there react basically scheduled the state update, state update are not performed instantly but at some time in future(after 1 or 2 milliseconds)(when react has time for it).
+** in most cases , those state  updates  of course  still  are executed  almost instantly. 
+
+
+In React, when the state of a functional component changes, React schedules a re-render of the component. However, the re-render doesn't happen immediately. Instead, React will finish executing the current function and then perform the re-render in the next cycle of the event loop.
+
+
+
+** the syling attributes like id, className and others will not be Automatically work in custom tag(like component function), it will only work as props and you will have to then use it for the built in tag like (<h1>, <p>, <section> etc) and for that we can wrap the id, class and styling attributes in forwarding props using rest operator and further we can spread it in the built in tag using spread operator rather than writing it manually.
+make sure that the props name should be like inbuilt attributes (id ,className, onClick).
+
+
+** Most Important..... the way react treat the identifier starting with upper or lower case letter:
+
+if you are passing some built in component(like - h1, menu, section, div) as a prop then after destructuring you must hold this value to another variable which is starting with Capital letter name, because if you will use the same identifier with smmaller case starting letter, react will look for some built in component not for props value but if you will use identifier with starting with capital letter react will look for props value and then react will also look if the provided string or any value is a recognized built in component or a Custom component.
+
+e.g 
+
+<Component identifier = "menu"/> // react will recognize the menu as built in even if it is passes in string.
+
+in Component Function 
+
+export defualt Component({identifier}){
+    const Tag = identifier
+ return (
+    <Tag> menu item</Tag> // if you directly use identifier here that will be recognized as built tag name with identifier. which doesn't exist anymore
+ )
+}
+
+
+
+look at once how below code works for richText.
+
+  return (
+    <div id="app">
+      <Input  type="text" placeholder="Your name" />
+      <Input richText placeholder="Your message" />
+    </div>
+  );
+
+export default function Input(props) {
+    return(
+        <>{!props.richText && <input {...props}/>}
+          {props.richText && <textarea {...props}/>  }
+
+        </>
+        )
+  // return a <textarea> if a richText prop is true
+  // return an <input> otherwise
+  // forward / set the received props on the returned elements
+}
+
+
+** even though because of the state change in parent component the child component will be executed again, the declaration or expression in child component file outside the child component function won't be executed again, if it is not wrapped by function or something which can be then executed from inside the child component function. and those declaration of variables or any expression will also be shared accross all the component instances.
+
+
+** strict mode in react is used while developing the react app, to help identify the errors, strictmode executes the react app twice and therefore helpfull in detecting problems when any data structure like object or array (due to reference memory) causing an error. 
+
+
+Refs and it's use cases... 
+
+** refs in react is used to access the html elements, it is react hook and a kind of value only. 
+
+1
+** use of ref is restricted in use cases, (because manipulating dom directly by code is not the idea behind react.)  if the use of ref is making the code more esier and then you can use it.  e.g the case with the input field to read the value attributes which might require and extra state to set the value from input field, and while reading only the value attribute we not crossing the dom manipulation.
+
+2 
+** just like state react also store the value of useRef()  and it won't be Automatically reset or deleted when the component function reexecutes. therefore you can use it to store the set timout async code and then letter state you clear it also. but setting ref value also doesn't cause to reexecute the function component.
+
+therefore the cases where the values doesn't really impact the ui changes and needs to be stored it's values for another state changes you can use ref.
+
+?? is used in this kind of syntax
+
+name ? name : anothername equivalent to  name ?? anothername
+
+
+** portals in react is used to attach the component dom from another  html element to another html, it could be upper to nested or nested to upper elements. it helps in syling. 

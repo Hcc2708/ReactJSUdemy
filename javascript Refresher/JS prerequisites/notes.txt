@@ -1,0 +1,4 @@
+note: regarding arrow function.
+The issue in your code is related to the use of an arrow function (fun2) within an object. Arrow functions do not have their own this context; instead, they inherit the this value from the enclosing scope (lexical scoping). In this case, the arrow function fun2 is within the scope of the global object (e.g., window in a browser environment), and it doesn't have access to the user object's properties.
+
+** try to use appendChild using docuement.createTextNode in place of directly changing the innerHTML using element.innerHTML, because innerHTML traverse the whole tree for that element before adding the new HTML to tha element.
