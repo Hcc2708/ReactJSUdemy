@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useCallback} from 'react';
 
 import Places from './components/Places.jsx';
 import { AVAILABLE_PLACES } from './data.js';
@@ -16,9 +16,9 @@ function App() {
   const selectedPlace = useRef();
   
  
-  const [pickedPlaces, setPickedPlaces] = useState([]);
+  const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
   const [availablePlaces, setAvailablePlaces] = useState([]);
-
+  const [isOpen, setIsOpen] = useState(false);
   
  
   useEffect(()=>{
@@ -27,20 +27,27 @@ function App() {
       setAvailablePlaces(sortedPlaces)
       // console.log("infinite")
     })
-  }, [])// here the [] is indicating that there is no dependencies and because of neither of the dependencies will be updated the the useEffect will only axecuted once but if we again re render the entire website(not only the app component or its children) this code will again run e.g when we do some changes and using ctrl + s we re-render it.
+  }, [])// here the [] is indicating that there is no dependencies and because of neither of the dependencies will be updated the useEffect will only axecuted once but if we(if useEffect is used in app component) again re render the entire website(not only the app component or its children)  this code will again run e.g when we do some changes and using ctrl + s we re-render it.
 
-  // you should use useEffect to prevent infinite loop or if you have the code that can execute only once after the  app or any component function renders at least once.
+  // 2nd situation if you have used the useEFfect in some component and that component is redering conditionaly i mean if that is add and remove cycle from dom then also the useEffect specified in the component will re execute.
+
+  // but if you are using any dependencies inside the [] then it will be executed every time when the values of the dpendencies changes not the re render of component. but if you don't use [] at all the use Effect will execute again in every re-render of component. 
+
+  // you should use useEffect to prevent infinite loop(e.g, infinite component rendering, due to asynchronous code(because setTimeout or setInterval)) or if you have the code that can execute only once after the  app or any component function renders at least once.
+
   // THE ABOVE SYNTAX OF useEffect() is usefull for the code that runs only once in app component after the other code renders in app.
 
   //if any values(usually state or props) that is used inside the the useEffect is responsible for re-rendering of component (i mean value not state updating function ) is considered as dependencies 
     
   function handleStartRemovePlace(id) {
-    modal.current.open();
+    // modal.current.open();
+    setIsOpen(true)
     selectedPlace.current = id;
   }
 
   function handleStopRemovePlace() {
-    modal.current.close();
+    // modal.current.close();
+    setIsOpen(false)
   }
 
   function handleSelectPlace(id) {
@@ -58,18 +65,20 @@ function App() {
     }
   }
 
-  function handleRemovePlace() {
+
+  const handleRemovePlace = useCallback(function handleRemovePlace() {
     setPickedPlaces((prevPickedPlaces) =>
       prevPickedPlaces.filter((place) => place.id !== selectedPlace.current)
     );
-    modal.current.close();
+    // modal.current.close();
+    setIsOpen(false)
     const placeId = JSON.parse(localStorage.getItem('selectedPlaces'))
     localStorage.setItem('selectedPlaces', JSON.stringify(placeId.filter((existingId)=> existingId !== selectedPlace.current)))
-  }
+  },[] ) 
 
   return (
     <>
-      <Modal ref={modal}>
+      <Modal  open = {isOpen} onClose = {handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
           onConfirm={handleRemovePlace}

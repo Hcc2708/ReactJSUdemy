@@ -73,8 +73,7 @@ function App() {
   return (
     <>
     <ContextApi.Provider value = {val}>
-      <Header
-      />
+      <Header/>
       <Shop  />
       </ContextApi.Provider>
     </>

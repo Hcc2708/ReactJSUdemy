@@ -101,3 +101,5 @@ name ? name : anothername equivalent to  name ?? anothername
 
 
 ** portals in react is used to attach the component dom from another  html element to another html, it could be upper to nested or nested to upper elements. it helps in syling. 
+
+** side effect is a task that don't directly impact the current component render but must be executed.
